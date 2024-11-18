@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
     lastname = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
-    expenses = db.relationship('Expense', backref='owner', lazy=True)
+    expenses = db.relationship("Expense", backref="owner", lazy=True)
 
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,7 +50,7 @@ class Expense(db.Model):
     amount = db.Column(db.Float, nullable=False)
     category = db.Column(db.String(50), nullable=False)
     date = db.Column(db.Date, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
 # configure endpoints
 @login_manager.user_loader
@@ -77,8 +77,8 @@ def signin():
     if not data.get("password"):
         return jsonify(message=f"'password' is required"), 400
 
-    username = data.get('username')
-    password = data.get('password')
+    username = data.get("username")
+    password = data.get("password")
 
     # Perform signin
     user = User.query.filter_by(username=username).first()
@@ -88,7 +88,7 @@ def signin():
 
     return jsonify(message=f"Signin failed. Check your credentials"), 400
 
-@app.route('/api/signup', methods=['POST'])
+@app.route("/api/signup", methods=["POST"])
 def signup():
     data = request.get_json()
     
@@ -105,10 +105,10 @@ def signup():
     if not data.get("password"):
         return jsonify(message=f"'password' is required"), 400
 
-    firstname = data.get('firstname')
-    lastname = data.get('lastname')
-    username = data.get('username')
-    password = data.get('password')
+    firstname = data.get("firstname")
+    lastname = data.get("lastname")
+    username = data.get("username")
+    password = data.get("password")
 
     if len(firstname) < 2:
         return jsonify(message="First name must be at least 2 characters long"), 400
@@ -149,31 +149,31 @@ def user_data():
     return jsonify({"firstname": user.firstname, "lastname": user.lastname, "username": user.username})
 
 # expenses related endpoints
-@app.route('/api/expenses', methods=['GET'])
+@app.route("/api/expenses", methods=["GET"])
 @login_required
 def get_expenses():
     expenses = Expense.query.filter_by(user_id=current_user.id).all()
     return jsonify([{
-        'id': expense.id,
-        'description': expense.description,
-        'amount': expense.amount,
-        'category': expense.category,
-        'date': expense.date.isoformat()
+        "id": expense.id,
+        "description": expense.description,
+        "amount": expense.amount,
+        "category": expense.category,
+        "date": expense.date.isoformat()
     } for expense in expenses]), 200
 
-@app.route('/api/expenses/<int:id>', methods=['GET'])
+@app.route("/api/expenses/<int:id>", methods=["GET"])
 @login_required
 def get_expense(id):
     expense = Expense.query.filter_by(id=id, user_id=current_user.id).first()
     return jsonify({
-        'id': expense.id,
-        'description': expense.description,
-        'amount': expense.amount,
-        'category': expense.category,
-        'date': expense.date.isoformat()
+        "id": expense.id,
+        "description": expense.description,
+        "amount": expense.amount,
+        "category": expense.category,
+        "date": expense.date.isoformat()
     }), 200
 
-@app.route('/api/expenses', methods=['POST'])
+@app.route("/api/expenses", methods=["POST"])
 @login_required
 def create_expense():
     data = request.get_json()
@@ -191,10 +191,10 @@ def create_expense():
     if not data.get("date"):
         return jsonify(message=f"'date' is required"), 400
 
-    description = data.get('description')
-    amount = data.get('amount')
-    category = data.get('category')
-    date = datetime.strptime(data.get('date'), "%Y-%m-%d").date()
+    description = data.get("description")
+    amount = data.get("amount")
+    category = data.get("category")
+    date = datetime.strptime(data.get("date"), "%Y-%m-%d").date()
 
     if len(description) < 3:
         return jsonify(message="Description must be at least 3 characters long"), 400
@@ -212,7 +212,7 @@ def create_expense():
 
     return jsonify(message="Expense created successfully"), 201
 
-@app.route('/api/expenses/<int:id>', methods=['PUT'])
+@app.route("/api/expenses/<int:id>", methods=["PUT"])
 @login_required
 def update_expense(id):
     data = request.get_json()
@@ -234,10 +234,10 @@ def update_expense(id):
     if not data.get("date"):
         return jsonify(message=f"'date' is required"), 400
 
-    description = data.get('description')
-    amount = data.get('amount')
-    category = data.get('category')
-    date = datetime.strptime(data.get('date'), "%Y-%m-%d").date()
+    description = data.get("description")
+    amount = data.get("amount")
+    category = data.get("category")
+    date = datetime.strptime(data.get("date"), "%Y-%m-%d").date()
 
     if len(description) < 3:
         return jsonify(message="Description must be at least 3 characters long"), 400
@@ -257,7 +257,7 @@ def update_expense(id):
 
     return jsonify(message="Expense updated successfully"), 200
 
-@app.route('/api/expenses/<int:id>', methods=['DELETE'])
+@app.route("/api/expenses/<int:id>", methods=["DELETE"])
 @login_required
 def delete_expense(id):
     expense = Expense.query.filter_by(id=id, user_id=current_user.id).first()
