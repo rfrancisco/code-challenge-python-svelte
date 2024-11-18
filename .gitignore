@@ -1,0 +1,16 @@
+# VS Code
+**/.vscode
+
+# Python
+**/.venv
+**/__pycache__
+**/instance
+**/*.db
+
+# Svelte
+**/node_modules
+**/build
+**/dist
+
+# macOS
+**/.DS_Store
