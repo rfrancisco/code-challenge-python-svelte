@@ -3,6 +3,19 @@
 Code challenge application consisting on an application that allow registered users to register their expenses.
 The backend is Python using 'Flask', and the frontent is built with 'Svelte'.
 
+## Dependencies
+
+To run and debug this application you will need to have:
+
+*Required*
+
+* Python 3
+* Node.js (v22 or above)
+
+*Optional*
+
+* If you use vscode it's recommended to install the official Python and Svelte extensions
+
 ## How to run
 
 Prepare backend and frontend:
